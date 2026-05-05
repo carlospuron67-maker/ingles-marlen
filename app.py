@@ -18,10 +18,10 @@ st.set_page_config(page_title="Trucker English Editor", page_icon="🚛", layout
 
 # --- MEMORIA DE SESIÓN (Para no perder cambios al recargar) ---
 if 'lista_palabras' not in st.session_state:
-    st.session_state.lista_palabras = """axle, beams, binder, box, BOL, bill of lading, inspection bay, lot, Mud flaps, parking space, pull-off, unload, brake, cab, cab card, CDL, medical card, logs, ELD, status, on-duty, off-duty, driving, permit, pull over, back up, keep going, slow down, arrow, flat, leaking, smoke, bulbs, lights, registration, insurance, charged, chassis, check, clean, clear, commercial, compliance, compliant, container, cracked, cracks, cuts, damage, DVIR, DOT, emergency, equipment, extinguisher, fifth-wheel, fine, fire, fluid, flush, fuses, gauge, glass, glove, high beams, low beams, horn, hours of service, identification, inspect, landing-gear, leaks, license, locked, mirror, paperwork, alcohol, drugs, substances, pressure, pre-trip, properly, release, reverse, rims, roadside, running, seatbelt, secured, sidewall, signs, signal, spare, step, tandem, tire, trailer, transmit, tread, triangles, truck, unit, valid, vehicle, washer, windshield, wipers, work, weight station"""
+    st.session_state.lista_palabras = """students, classroom, curriculum, assessment, proficiency, culture, lesson, planning, middle-school, adolescent, management, behavior, engagement, differentiation, instruction, standards, ACTFL, communication, interpretive, interpersonal, presentational, language, acquisition, immersion, fluency, heritage, native, learners, diversity, equity, inclusion, empathy, rapport, community, parents, collaboration, teamwork, department, technology, digital, interactive, project-based, inquiry, feedback, rubrics, objectives, scaffolding, growth, mindset, data, results, observation, professional, development, leadership, flexibility, patience, organization, transitions, routines, expectations, consistency, motivation, success, creativity, authentic, resources, literature, grammar, vocabulary, listening, speaking, reading, writing, comprehension, formative, summative, homework, grading, support, intervention, enrichment, IEP, accommodations, accessibility, safety, environment, social-emotional, learning, development, relationship, storytelling, games, music, multimedia, reflection, goals, ethics, multiculturalism, advocacy"""
 
 if 'prompt_maestro' not in st.session_state:
-    st.session_state.prompt_maestro = """Actúa como un oficial del DOT real en una inspección de carretera. 
+    st.session_state.prompt_maestro = """Actúa como un director de una escuela entrevistando a un candidato a una  posicion de español en una middle school. 
 Tu objetivo: Crear bloques de práctica siguiendo un patrón ESTRICTO.
 
 REGLAS DE ORO:
@@ -30,22 +30,22 @@ REGLAS DE ORO:
 3. SECUENCIA OBLIGATORIA (No puedes saltarte el orden):
    Bloque 1: Pregunta (Question)
    Bloque 2: Indicación/Comando (Command)
-   Bloque 3: Advertencia (Warning)
-   Bloque 4: Hallazgo (Finding)
+   Bloque 3: Experiencia (Experience)
+   Bloque 4: Clases (Class)
    ... y repetir el ciclo (1, 2, 3, 4, 1, 2...).
 
 EJEMPLOS DE ESTILO (SOLO REFERENCIA, PROHIBIDO USAR ESTAS FRASES):
-- Pregunta: "Show me your CDL and medical card."
-- Comando: "Step out of the cab now."
-- Advertencia: "Your tire tread is getting low, watch it."
-- Hallazgo: "I found a leak in your secondary air system."
+- Pregunta: "What is your name?."
+- Comando: "Please sit down."
+- Advertencia: "You must have a command of technology.."
+- Hallazgo: "I found a problem with the schedule.."
 
 REGLA ANTI-REPETICIÓN: Genera frases totalmente nuevas y aleatorias usando la lista de palabras. No empieces siempre con las mismas órdenes.
 
 FORMATO DE SALIDA (Usa exactamente '###' para separar bloques):
 ES: [Frase en español]
-EN: [Frase del oficial]
-RES: [Respuesta del camionero, máx 4 palabras]
+EN: [Frase del Director]
+RES: [Respuesta del entrevistado,entre 4 y 8 palabras]
 ###"""
 
 
@@ -65,7 +65,7 @@ async def generate_edge_audio(text, voice, filename):
     await communicate.save(filename)
 
 # --- INTERFAZ ---
-st.title("🚛 Trucker English Pro")
+st.title("🚛 Marlen English Pro")
 
 # --- BLOQUE DE EDICIÓN (EXPANDER) ---
 with st.expander("⚙️ Editar Lista de Palabras y Prompt"):
@@ -110,7 +110,7 @@ PROHIBIDO generar dos preguntas seguidas.
 
     FORMATO:
     ES: [frase en español]
-    EN: EN: [frase del oficial en inglés según el tipo: pregunta, comando, advertencia o hallazgo]
+    EN: EN: [frase del Director en inglés según el tipo: pregunta, comando, advertencia o hallazgo]
     RES: [respuesta corta en inglés]
     
     PALABRAS CLAVE PARA USAR: {lista_para_api}

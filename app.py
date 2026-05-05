@@ -40,12 +40,23 @@ EJEMPLOS DE ESTILO (SOLO REFERENCIA, PROHIBIDO USAR ESTAS FRASES):
 - Advertencia: "You must have a command of technology.."
 - Hallazgo: "I found a problem with the schedule.."
 
-REGLA ANTI-REPETICIÓN: Genera frases totalmente nuevas y aleatorias usando la lista de palabras. No empieces siempre con las mismas órdenes.
+REGLA ANTI-REPETICIÓN: Genera frases totalmente nuevas y aleatorias usando la lista de palabras. No empieces siempre con las mismas preguntas.
+REGLA En cada generacion nueva de pregunta y respuesta incluir dos las siguientes preguntas:
+1-What are your strengths?-My strengths as native Spanish speaker are teaching authentic language and culture, and creating interesting activities that help students stay engaged.I am patient, organized, and I always try to support each student in the way they learn best. I work well with others and enjoy collaborating in a team.I adapt quickly to new situations.I am very organized, and use my time  efficiently.Iam good at finding solutions with students' situations
+2-What are your weaknesses? Sometime I use too much Spanish in class and this can be difficult with students at first! but I support my ideas with :
+Gestures, very easy vocabulary ,images and videos in class.
+3- Tell me about you? I am native Spanish speaker  with strong passion for teaching with more that 10 years of experience in USA and more that 20 in Cuba. Also I love share  my culture with my students.
+I was teaching in WCHS> Spanish 1,2,3, Ap and Heritage and Bussines. I observe the students' needs and also use class time to addressing their difficulties
+Now I am teaching to write in cursive and the experience has been fantastic.
+4-Why do you want to work in this school?To continue working in this district—To help middle school students learn Spanish well, before they go to high school.
+5-What  makes you a strong candidate for his position? Because my class is unique! Iam native Spanish speaker, with experience ,passion ,for my  culture, that help students integrate into a multicultural community.
+
+
 
 FORMATO DE SALIDA (Usa exactamente '###' para separar bloques):
 ES: [Frase en español]
 EN: [Frase del Director]
-RES: [Respuesta del entrevistado,entre 4 y 8 palabras]
+RES: [Respuesta del entrevistado deber ser tamaño medio entre 4 y 8 palabras]
 ###"""
 
 
@@ -111,7 +122,7 @@ PROHIBIDO generar dos preguntas seguidas.
     FORMATO:
     ES: [frase en español]
     EN: EN: [frase del Director en inglés según el tipo: pregunta, comando, advertencia o hallazgo]
-    RES: [respuesta corta en inglés]
+    RES: [respuesta de tamaño medio en inglés]
     
     PALABRAS CLAVE PARA USAR: {lista_para_api}
     ID de variación: {seed}
@@ -165,7 +176,7 @@ PROHIBIDO generar dos preguntas seguidas.
                     pausa = AudioSegment.silent(duration=1000)
 
                     # Seleccionamos las 5 voces (Aquí es donde daba el error)
-                    voces_leccion = random.sample(voces_maestras, 5)
+                    voces_leccion = random.sample(voces_maestras, 1)
                     
                     audio_preguntas = AudioSegment.empty()
                     audio_respuestas = AudioSegment.empty()

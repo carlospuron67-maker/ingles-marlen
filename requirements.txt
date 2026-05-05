@@ -1,0 +1,6 @@
+streamlit
+groq
+edge-tts
+pydub
+gTTS
+audioop-lts

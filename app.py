@@ -27,11 +27,7 @@ Tu objetivo: Crear bloques de práctica siguiendo un patrón ESTRICTO.
 REGLAS DE ORO:
 1. Vocabulario: Usa palabras de la lista proporcionada.
 2. Estilo: Inglés directo, seco y rápido.
-3. SECUENCIA OBLIGATORIA (No puedes saltarte el orden):
-   Bloque 1: Pregunta (Question)
-   Bloque 2: Experiencia (Experience)
-   Bloque 3: Clases (Class)
-   ... y repetir el ciclo (1, 2, 3, 1, 2...).
+3. Cada pregunta con su respuesta adecuada
 
 
 REGLA ANTI-REPETICIÓN: Genera preguntas totalmente nuevas y aleatorias usando la lista de palabras. No empieces siempre con las mismas preguntas.
@@ -110,8 +106,6 @@ if st.button("🚀 Generar Lecciones", use_container_width=True):
     
 LISTA DE PALABRAS (Prioridad): {lista_para_api}
 
-RECUERDA: Empieza con Pregunta, luego Comando, luego Advertencia, luego Hallazgo. 
-PROHIBIDO generar dos preguntas seguidas.
 
     FORMATO:
     ES: [frase en español]
@@ -129,7 +123,7 @@ PROHIBIDO generar dos preguntas seguidas.
                 messages=[
                     {
                         "role": "system", 
-                        "content": "You are a strict DOT inspector. You MUST follow the requested pattern (Question, Command, Warning, Finding) without exception. Do not repeat types. Be dry and direct."
+                        "content": "You are a strict Principal School. You MUST follow the requested pattern Question, without exception. Do not repeat types. Be dry and direct."
                     },
                     {
                         "role": "user", 

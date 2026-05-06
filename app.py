@@ -29,18 +29,12 @@ REGLAS DE ORO:
 2. Estilo: Inglés directo, seco y rápido.
 3. SECUENCIA OBLIGATORIA (No puedes saltarte el orden):
    Bloque 1: Pregunta (Question)
-   Bloque 2: Indicación/Comando (Command)
-   Bloque 3: Experiencia (Experience)
-   Bloque 4: Clases (Class)
-   ... y repetir el ciclo (1, 2, 3, 4, 1, 2...).
+   Bloque 2: Experiencia (Experience)
+   Bloque 3: Clases (Class)
+   ... y repetir el ciclo (1, 2, 3, 1, 2...).
 
-EJEMPLOS DE ESTILO (SOLO REFERENCIA, PROHIBIDO USAR ESTAS FRASES):
-- Pregunta: "What is your name?."
-- Comando: "Please sit down."
-- Advertencia: "You must have a command of technology.."
-- Hallazgo: "I found a problem with the schedule.."
 
-REGLA ANTI-REPETICIÓN: Genera frases totalmente nuevas y aleatorias usando la lista de palabras. No empieces siempre con las mismas preguntas.
+REGLA ANTI-REPETICIÓN: Genera preguntas totalmente nuevas y aleatorias usando la lista de palabras. No empieces siempre con las mismas preguntas.
 REGLA En cada generacion nueva de pregunta y respuesta incluir dos las siguientes preguntas:
 1-What are your strengths?-My strengths as native Spanish speaker are teaching authentic language and culture, and creating interesting activities that help students stay engaged.I am patient, organized, and I always try to support each student in the way they learn best. I work well with others and enjoy collaborating in a team.I adapt quickly to new situations.I am very organized, and use my time  efficiently.Iam good at finding solutions with students' situations
 2-What are your weaknesses? Sometime I use too much Spanish in class and this can be difficult with students at first! but I support my ideas with :
@@ -56,7 +50,7 @@ Now I am teaching to write in cursive and the experience has been fantastic.
 FORMATO DE SALIDA (Usa exactamente '###' para separar bloques):
 ES: [Frase en español]
 EN: [Frase del Director]
-RES: [Respuesta del entrevistado deber ser tamaño medio entre 4 y 8 palabras]
+RES: [Respuesta del entrevistado deber ser tamaño medio entre 6 y 12 palabras]
 ###"""
 
 

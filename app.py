@@ -43,8 +43,14 @@ Now I am teaching to write in cursive and the experience has been fantastic.
 
 
 
+REGLA DE TRADUCCIÓN (MUY IMPORTANTE):
+La línea "ES:" DEBE ser una traducción exacta, natural y fiel de la línea "EN:" (mismo significado, mismo tono).
+- Usa español latino natural, como lo hablaría un hispanohablante nativo (evita calcos literales del inglés).
+- No agregues ni quites información: el significado de ES y EN debe ser idéntico.
+- Evita traducciones robóticas o demasiado formales; que suene a conversación real.
+
 FORMATO DE SALIDA (Usa exactamente '###' para separar bloques):
-ES: [Frase en español]
+ES: [Traducción natural y fiel al español de la línea EN]
 EN: [Frase del Director]
 RES: [Respuesta del entrevistado deber ser tamaño medio entre 6 y 12 palabras]
 ###"""
@@ -105,6 +111,15 @@ if orden_es == "Personalizado":
              "Si el número es mayor a la cantidad de audios de la lección, el ES se pondrá al final."
     )
 
+# --- NUEVO: CANTIDAD DE VOCES DISTINTAS PARA LA PREGUNTA (OFICIAL) ---
+cantidad_voces = st.slider(
+    "🎙️ Cantidad de voces distintas para la pregunta en inglés",
+    min_value=1,
+    max_value=12,
+    value=3,
+    help="Cuántos acentos/voces distintas leerán la frase del oficial en cada lección, uno tras otro."
+)
+
 if st.button("🚀 Generar Lecciones", use_container_width=True):
     # Limpiar archivos viejos
     for f in glob.glob("leccion_*.mp3"):
@@ -150,7 +165,7 @@ LISTA DE PALABRAS (Prioridad): {lista_para_api}
                         "content": prompt_final
                     }
                 ],
-                temperature=0.7
+                temperature=0.4
             )
 
             # --- 1. PROCESAMIENTO DE TEXTO ---
@@ -183,30 +198,30 @@ LISTA DE PALABRAS (Prioridad): {lista_para_api}
                     a_es = AudioSegment.from_mp3("es.mp3")
                     pausa = AudioSegment.silent(duration=1000)
 
-                    # Seleccionamos las 5 voces (Aquí es donde daba el error)
-                    voces_leccion = random.sample(voces_maestras, 1)
+                    # Seleccionamos la cantidad de voces distintas elegida por el usuario
+                    voces_leccion = random.sample(voces_maestras, min(len(voces_maestras), cantidad_voces))
 
                     # --- NUEVO: en vez de acumular en dos bloques fijos (preguntas/respuestas),
                     # construimos una lista ordenada de "clips" para poder insertar el ES
                     # en la posición que el usuario elija.
                     audio_clips = []  # cada elemento ya trae su pausa incluida
 
-                    # --- BUCLE INTERNO: EL OFICIAL REPITE, EL CAMIONERO NO ---
+                    # --- BUCLE INTERNO: EL OFICIAL REPITE CON TODAS SUS VOCES SEGUIDAS ---
                     for v_idx, voz_elegida in enumerate(voces_leccion):
                         f_q = f"q_{v_idx}.mp3"
-                        f_a = "res_camionero.mp3" # Nombre fijo para la respuesta
-                        
-                        # 1. OFICIAL: Se graban las voces distintas
+
+                        # OFICIAL: Se graban y añaden todas las voces distintas, una tras otra
                         asyncio.run(generate_edge_audio(en_t, voz_elegida, f_q))
                         audio_clips.append(AudioSegment.from_mp3(f_q) + pausa)
-                        
-                        # 2. CAMIONERO: Grabamos solo una vez (en la primera vuelta)
-                        if v_idx == 0:
-                            asyncio.run(generate_edge_audio(res_t, voz_elegida, f_a))
-                        
-                        # 3. CAMIONERO: Añadimos el audio a la cadena solo 3 veces
-                        if v_idx < 3:
-                            audio_clips.append(AudioSegment.from_mp3(f_a) + pausa)
+
+                    # CAMIONERO: Grabamos la respuesta una sola vez (con la primera voz de la lección)
+                    f_a = "res_camionero.mp3"
+                    asyncio.run(generate_edge_audio(res_t, voces_leccion[0], f_a))
+                    respuesta_clip = AudioSegment.from_mp3(f_a) + pausa
+
+                    # La respuesta se repite 3 veces, al final de las preguntas
+                    for _ in range(3):
+                        audio_clips.append(respuesta_clip)
 
                     # --- NUEVO: Insertar el clip de ES en la posición elegida ---
                     es_clip = a_es + pausa

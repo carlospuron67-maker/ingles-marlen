@@ -85,6 +85,26 @@ with st.expander("⚙️ Editar Lista de Palabras y Prompt"):
 # --- GENERACIÓN ---
 cantidad = st.slider("Frases a generar", 1, 15, 5)
 
+# --- NUEVO: OPCIÓN DE POSICIÓN DEL AUDIO EN ESPAÑOL (ES) ---
+st.markdown("**🎚️ Posición de la traducción (ES) dentro de cada lección**")
+orden_es = st.radio(
+    "¿Dónde quieres escuchar la frase en español?",
+    ["Al principio", "Al final", "Personalizado"],
+    horizontal=True
+)
+
+pos_personalizada = 1
+if orden_es == "Personalizado":
+    pos_personalizada = st.number_input(
+        "Reproducir el ES después del audio número:",
+        min_value=1,
+        max_value=20,
+        value=1,
+        step=1,
+        help="Ej: 1 = después del primer audio (la pregunta). 2 = después del segundo audio, etc. "
+             "Si el número es mayor a la cantidad de audios de la lección, el ES se pondrá al final."
+    )
+
 if st.button("🚀 Generar Lecciones", use_container_width=True):
     # Limpiar archivos viejos
     for f in glob.glob("leccion_*.mp3"):
@@ -165,18 +185,20 @@ LISTA DE PALABRAS (Prioridad): {lista_para_api}
 
                     # Seleccionamos las 5 voces (Aquí es donde daba el error)
                     voces_leccion = random.sample(voces_maestras, 1)
-                    
-                    audio_preguntas = AudioSegment.empty()
-                    audio_respuestas = AudioSegment.empty()
+
+                    # --- NUEVO: en vez de acumular en dos bloques fijos (preguntas/respuestas),
+                    # construimos una lista ordenada de "clips" para poder insertar el ES
+                    # en la posición que el usuario elija.
+                    audio_clips = []  # cada elemento ya trae su pausa incluida
 
                     # --- BUCLE INTERNO: EL OFICIAL REPITE, EL CAMIONERO NO ---
                     for v_idx, voz_elegida in enumerate(voces_leccion):
                         f_q = f"q_{v_idx}.mp3"
                         f_a = "res_camionero.mp3" # Nombre fijo para la respuesta
                         
-                        # 1. OFICIAL: Se graban las 5 voces distintas
+                        # 1. OFICIAL: Se graban las voces distintas
                         asyncio.run(generate_edge_audio(en_t, voz_elegida, f_q))
-                        audio_preguntas += AudioSegment.from_mp3(f_q) + pausa
+                        audio_clips.append(AudioSegment.from_mp3(f_q) + pausa)
                         
                         # 2. CAMIONERO: Grabamos solo una vez (en la primera vuelta)
                         if v_idx == 0:
@@ -184,10 +206,25 @@ LISTA DE PALABRAS (Prioridad): {lista_para_api}
                         
                         # 3. CAMIONERO: Añadimos el audio a la cadena solo 3 veces
                         if v_idx < 3:
-                            audio_respuestas += AudioSegment.from_mp3(f_a) + pausa
+                            audio_clips.append(AudioSegment.from_mp3(f_a) + pausa)
 
-                    # Unión final de la lección
-                    final = a_es + pausa + audio_preguntas + audio_respuestas
+                    # --- NUEVO: Insertar el clip de ES en la posición elegida ---
+                    es_clip = a_es + pausa
+
+                    if orden_es == "Al principio":
+                        pos_insercion = 0
+                    elif orden_es == "Al final":
+                        pos_insercion = len(audio_clips)
+                    else:  # Personalizado
+                        # Se limita para no salirse del rango disponible
+                        pos_insercion = min(pos_personalizada, len(audio_clips))
+
+                    audio_clips.insert(pos_insercion, es_clip)
+
+                    # Unión final de la lección respetando el orden con ES incluido
+                    final = AudioSegment.empty()
+                    for clip in audio_clips:
+                        final += clip
                     
                     audio_path = f"leccion_{i}.mp3"
                     final.export(audio_path, format="mp3")
